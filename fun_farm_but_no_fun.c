@@ -101,20 +101,35 @@ case 4: {
 	if (!safe_scan(&slot)) break;
 
 	if (slot < 0 || slot >= INVENTORY_SIZE) { // Индекс слота не может быть ниже нуля или переходить дальше размера инвентаря
-		printf("Ошибка: Неверный номер слота!\n");
+		printf("Ошибка: Неверный индекс слота!\n");
 		break;
 	}
 
 	printf("Введите ID предмета (%d-%d): ", ID_EMPTY, ID_COIN);
 	if (!safe_scan(&item_id)) break; 
 
-	if (item_id < 0 || item_id > 9) { // Нельзя ввести ID предмета ниже 0 и 9, упираемся на то что ID предметов расположены от 0 до 9
+	if (item_id < ID_EMPTY || item_id > ID_COIN) { // Нельзя ввести ID предмета ниже значения 0 и 9, упираемся на то что ID предметов расположены от 0 до 9
 		printf("Ошибка: Такого предмета не существует!\n");
 		break;
 	}
 
 	inventory[slot] = item_id;
 	printf("Предмет с ID %d успешно положен в слот %d.\n", item_id, slot);
+	break;
+}
+
+case 5: {
+	int slot;
+	printf("Какой предмет выбросить? (0-%d): ", INVENTORY_SIZE - 1);
+	if (!safe_scan(&slot)) break;
+
+	if (slot < 0 || slot >= INVENTORY_SIZE) {
+		printf("Ошибка: Неверный индекс слота!\n");
+		break;
+	}
+
+	inventory[slot] = ID_EMPTY; // Записываю в ячейку значение ID_EMPTY, т.е. 0 и избавляемся так от предмета.
+	printf("Предмет %d выброшен.\n", slot);
 	break;
 }
 
