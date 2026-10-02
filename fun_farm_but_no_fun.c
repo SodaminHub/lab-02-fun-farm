@@ -27,20 +27,24 @@ int safe_scan(int* value) { // Проверяю на введение числа
 int main()
 {
 	int current_day = 1;
-	int current_hour = 8
+	int current_hour = 8;
+	int userAction;
+	int inventory[INVENTORY_SIZE] = { 6, 4, 0, 0, 3, 1, 1, 8, 2, 9 };
 
 switch (userAction) {
 case 0:
     printf("Выход из игры. Возвращайтесь ещё!");
     break;
+
 case 1:
-	printf("Текущее время : % d день % d час”, day, hours");
+	printf("Текущее время : %d день %d час”, day, hours");
 	break;
+
 case 2: {
 	int work_hours;
 	printf("Сколько часов вы хотите потратить на работу? ");
 
-	if (!safe_scan(&work_hours)) break;
+	if (!safe_scan(&work_hours)) break; // Безопасно считываю количество рабочих часов, при ошибке возвращаюсь обратно
 	if (work_hours <= 0) {
 		printf("Ошибка: Нельзя работать 0 или меньше часов. Введите заново число.\n");
 		break;
@@ -55,11 +59,12 @@ case 2: {
 	printf("Вы успешно поработали в течение %d ч.!\n", work_hours);
 	break
 }
+
 case 3:
 
 	printf("\n--- СОДЕРЖИМОЕ ИНВЕНТАРЯ ---\n");
 	for (int i = 0; i < INVENTORY_SIZE; i++) {
-		printf("Слот %d: [%d]", i, inventory[i]); // Вывожу номер слота и ID предмета
+		printf("Слот %d: [%d]", i, inventory[i]); // Вывожу индекс слота и ID предмета
 
 		switch (inventory[i]) { // Соотнёс ID предмета и напечатал его название для игрока
 
@@ -87,3 +92,30 @@ case 3:
 		printf("\n");
 	}
 	break;
+
+case 4: {
+	int slot;
+	int item_id;
+
+	printf("Выберите слот инвентаря (0-%d): ", INVENTORY_SIZE - 1);
+	if (!safe_scan(&slot)) break;
+
+	if (slot < 0 || slot >= INVENTORY_SIZE) { // Индекс слота не может быть ниже нуля или переходить дальше размера инвентаря
+		printf("Ошибка: Неверный номер слота!\n");
+		break;
+	}
+
+	printf("Введите ID предмета (%d-%d): ", ID_EMPTY, ID_COIN);
+	if (!safe_scan(&item_id)) break; 
+
+	if (item_id < 0 || item_id > 9) { // Нельзя ввести ID предмета ниже 0 и 9, упираемся на то что ID предметов расположены от 0 до 9
+		printf("Ошибка: Такого предмета не существует!\n");
+		break;
+	}
+
+	inventory[slot] = item_id;
+	printf("Предмет с ID %d успешно положен в слот %d.\n", item_id, slot);
+	break;
+}
+
+}
